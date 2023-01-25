@@ -6,9 +6,6 @@ const messageEl = document.querySelector('[name="message"]');
 
 const KEY = 'feedback-form-state';
 
-formEl.addEventListener('input', throttle(onFormInput, 500));
-formEl.addEventListener('submit', onFormSubmit);
-
 let formData = {
     email: '',
     message: '',
@@ -19,8 +16,12 @@ function onFormInput(e) {
     localStorage.setItem(KEY, JSON.stringify(formData));
 }
 
+onFormInput = throttle(onFormInput, 500);
+formEl.addEventListener('input', onFormInput);
+formEl.addEventListener('submit', onFormSubmit);
+
 function onPageInit() {
-const savedData = JSON.parse(localStorage.getItem(KEY));
+    const savedData = JSON.parse(localStorage.getItem(KEY));
     
     if (savedData) {
         emailEl.value = savedData.email;
@@ -29,7 +30,6 @@ const savedData = JSON.parse(localStorage.getItem(KEY));
         formData.email = savedData.email;
         formData.message = savedData.message;
     }
-    
 }
 onPageInit();
 
